@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { Text, View, SafeAreaView, TextInput, StyleSheet, Button, TouchableOpacity } from 'react-native';
+import { Text, View, SafeAreaView, StyleSheet} from 'react-native';
 import { Input, Fab } from 'native-base';
-import DatePicker from 'react-native-date-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faPlus, faCalendar, faClock } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faClock } from '@fortawesome/free-solid-svg-icons';
 import DateTimePicker from '../components/DateTimePicker';
-import moment from 'moment';
 
 export default class AddTaskScreen extends Component {
     constructor(props) {
