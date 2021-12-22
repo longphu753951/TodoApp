@@ -18,7 +18,6 @@ export default function DateTimePicker(props) {
 
     useEffect(()=> {
         if(defaultDate && mode) {
-            console.log(defaultDate);
             setDateText(defaultDate);
             switch(mode) {
                 case 'date':
