@@ -49,6 +49,7 @@ class TodoScreen extends Component {
 
     navigateToEditTaskScreen(data) {
         const { navigate } = this.props.navigation;
+        console.log(data);
         navigate('EditTaskScreen', data);
     }
 
@@ -100,7 +101,7 @@ class TodoScreen extends Component {
                         <View style={styles.rowBack}>
                             <TouchableOpacity
                                 style={[styles.backRightBtn, styles.backRightBtnLeft]}
-                                onPress={() => this.navigateToEditTaskScreen(data.item)}
+                                onPress={() => this.navigateToEditTaskScreen(data)}
                             >
                                 <FontAwesomeIcon size={35} color='white' icon={ faEdit } />
                             </TouchableOpacity>

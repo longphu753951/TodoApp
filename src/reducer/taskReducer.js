@@ -23,6 +23,14 @@ export const toggleCompleteAction = (taskNumber) => {
     }
 }
 
+export const editTaskAction = (taskNumber, taskContent) => {
+    return {
+        type: 'EDIT_TASK',
+        taskNumber,
+        taskContent
+    }
+}
+
 export const removeTaskAction = (taskNumber)=>{
     return{
         type: 'REMOVE_TASK',
@@ -81,6 +89,18 @@ const INITIAL_STATE = {
                     ...state,
                     list: state.list.map((item, index) => index === action.taskNumber ? {...item, completed: !item.completed}
                     : item)
+                }
+
+            case 'EDIT_TASK':
+                return {
+                    ...state,
+                    list: state.list.map((item, index) => 
+                        index === action.taskNumber ? {
+                            ...item, 
+                            name: action.taskContent.name, 
+                            date: action.taskContent.date, 
+                            time: action.taskContent.time,
+                        }: item)
                 }
             default:    
                 return state;

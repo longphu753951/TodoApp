@@ -3,26 +3,24 @@ import { Text, View, SafeAreaView, StyleSheet} from 'react-native';
 import { Input, Fab } from 'native-base';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faPlus, faClock } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faClock } from '@fortawesome/free-solid-svg-icons';
 import DateTimePicker from '../components/DateTimePicker';
+import { connect } from 'react-redux';
+import { editTaskAction } from '../reducer/taskReducer';
 
-export default class EditTaskScreen extends Component {
+class EditTaskScreen extends Component {
     constructor(props) {
         super(props);
         this.state ={
-            name: '',
-            date: '',
-            time: '',
+            name: this.props.route.params.item.name,
+            date: this.props.route.params.item.date,
+            time: this.props.route.params.item.time,
         }
         this.openDateModal = this.openDateModal.bind(this);
     }
 
     componentDidMount(){
-        this.setState({
-            name: this.props.route.params.name,
-            date: this.props.route.params.date,
-            time: this.props.route.params.time,
-        })
+        
     }
 
     componentDidUpdate() {
@@ -41,6 +39,16 @@ export default class EditTaskScreen extends Component {
        this.setState({open: true})
     }
 
+    editTask = () => {
+        let taskContent = {
+            name: this.state.name,
+            date: this.state.date,
+            time: this.state.time
+        }
+        this.props.editTaskAction(this.props.route.params.index, taskContent)
+        this.props.navigation.goBack();
+    }
+
     render() {
         return (
             <KeyboardAwareScrollView>
@@ -52,9 +60,15 @@ export default class EditTaskScreen extends Component {
                     </View>
                     <View style={styles.inputContainer}>
                         <Input
+                         defaultValue={this.state.name}
                          borderColor={'#000000'} 
                          fontSize={18}
                          variant="underlined" 
+                         onChangeText={(text) => {
+                            this.setState({
+                                name: text
+                            })
+                        }}
                          placeholder="Type to edit your task ..." />
                         {/* <Button 
                             title="Open" 
@@ -63,15 +77,20 @@ export default class EditTaskScreen extends Component {
                             <DateTimePicker
                                 defaultDate={this.state.date}
                                 onChange={(dateText) => {
-                                    console.log(dateText);
+                                    this.setState({
+                                        date: dateText,
+                                    });
                                 }}
                             />
                             <DateTimePicker
                                 icon = {faClock}
                                 placeholder='HH:mm'
                                 mode='time'
+                                defaultDate={this.state.time}
                                 onChange={(dateText) => {
-                                    console.log(dateText);
+                                    this.setState({
+                                        time: dateText
+                                    })
                                 }}
                                 buttonStyle = {{marginLeft: 20}}   
                             />
@@ -80,13 +99,26 @@ export default class EditTaskScreen extends Component {
                     <Fab
                         position="absolute"
                         size="sm"
-                        icon={<FontAwesomeIcon size={35} color='white' icon={ faPlus } />}
+                        icon={<FontAwesomeIcon size={35} color='white' icon={ faEdit } />}
+                        onPress={()=> {
+                            this.editTask()
+                        }}
                     />
                 </SafeAreaView>
             </KeyboardAwareScrollView>
         )
     }
 }
+
+const mapDispatchToProps = dispatch =>{
+    return{
+        editTaskAction: (taskNumber, taskContent)=>{
+            dispatch(editTaskAction(taskNumber, taskContent));
+        }
+    }
+}
+
+export default connect(null,mapDispatchToProps)(EditTaskScreen);
 
 const styles = new StyleSheet.create({
     headingContainer: {
