@@ -14,7 +14,7 @@ import store from './src/store';
 const App = () => {
   console.log(store);
   return (
-    <Provider store={store}>
+    <Provider store={store()}>
       <View style={{flex: 1}}>
         <StatusBar barStyle='dark-content' />
         <NativeBaseProvider>

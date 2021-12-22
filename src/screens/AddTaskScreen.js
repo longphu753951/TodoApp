@@ -5,22 +5,24 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus, faClock } from '@fortawesome/free-solid-svg-icons';
 import DateTimePicker from '../components/DateTimePicker';
+import { connect } from 'react-redux';
+import { addTaskAction } from '../reducer/taskReducer'
 
-export default class AddTaskScreen extends Component {
+class AddTaskScreen extends Component {
     constructor(props) {
         super(props);
         this.state ={
-            date: new Date(),
-            open: false,
-            dateText:'',
-            hour: new Date(),
-            hourText: '',
+            name: '',
+            date: '',
+            time: '',
         }
         this.openDateModal = this.openDateModal.bind(this);
     }
 
-    componentDidUpdate() {
-        console.log(this.state.date);
+    componentDidUpdate(prevState) {
+        if(prevState.name != this.state.name){
+            console.log(this.state.name);
+        }
     }
 
     formatDate() {
@@ -32,7 +34,18 @@ export default class AddTaskScreen extends Component {
     }
 
     openDateModal() {
-       this.setState({open: true})
+       this.setState({open: true});
+    }
+
+    addTask = () => {
+        let newTask = {
+            name: this.state.name,
+            date: this.state.date,
+            time: this.state.time,
+            completed: false,
+        }
+        this.props.addTaskAction(newTask);
+        this.props.navigation.goBack();
     }
 
     render() {
@@ -48,6 +61,11 @@ export default class AddTaskScreen extends Component {
                         <Input
                          borderColor={'#000000'} 
                          fontSize={18}
+                         onChangeText={(text) => {
+                             this.setState({
+                                 name: text
+                             })
+                         }}
                          variant="underlined" 
                          placeholder="Type your new task ..." />
                         {/* <Button 
@@ -56,7 +74,9 @@ export default class AddTaskScreen extends Component {
                         <View style={styles.dateTimeInputContainer}>
                             <DateTimePicker
                                 onChange={(dateText) => {
-                                    console.log(dateText);
+                                    this.setState({
+                                        date: dateText,
+                                    });
                                 }}
                             />
                             <DateTimePicker
@@ -64,7 +84,9 @@ export default class AddTaskScreen extends Component {
                                 placeholder='HH:mm'
                                 mode='time'
                                 onChange={(dateText) => {
-                                    console.log(dateText);
+                                    this.setState({
+                                        time: dateText
+                                    })
                                 }}
                                 buttonStyle = {{marginLeft: 20}}   
                             />
@@ -73,6 +95,9 @@ export default class AddTaskScreen extends Component {
                     <Fab
                         position="absolute"
                         size="sm"
+                        onPress={()=> {
+                            this.addTask()
+                        }}
                         icon={<FontAwesomeIcon size={35} color='white' icon={ faPlus } />}
                     />
                 </SafeAreaView>
@@ -80,6 +105,17 @@ export default class AddTaskScreen extends Component {
         )
     }
 }
+
+
+const mapDispatchToProps = dispatch =>{
+    return{
+        addTaskAction: (newTask)=>{
+            dispatch(addTaskAction(newTask));
+        }
+    }
+}
+
+export default connect(null,mapDispatchToProps)(AddTaskScreen);
 
 const styles = new StyleSheet.create({
     headingContainer: {

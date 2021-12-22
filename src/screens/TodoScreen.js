@@ -2,10 +2,14 @@ import React, { Component } from 'react'
 import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native'
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faPlus, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash, faEdit, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCircle } from '@fortawesome/free-regular-svg-icons'
 import moment from 'moment';
+import {connect} from "react-redux";
+import { removeTaskAction, taskFetchAction, toggleCompleteAction } from '../reducer/taskReducer';
+import DisplayMode from 'react-native/Libraries/ReactNative/DisplayMode';
 
-export default class TodoScreen extends Component {
+class TodoScreen extends Component {
 
     constructor(props){
         super(props);
@@ -16,25 +20,44 @@ export default class TodoScreen extends Component {
     }
 
     componentDidMount() {
+        this.props.taskFetchAction();
+        console.log('asdasd',this.props.taskList.list);
         this.setState({
-            listViewData: Array(20)
-            .fill("")
-            .map((_, i) => ({ key: `${i}`, text: `item #${i}` }))
+            listViewData: this.props.taskList.list
         })
     }
+
+    componentDidUpdate(prevProps) {
+        if(prevProps.taskList !== this.props.taskList){
+            console.log(this.props.list);
+            this.setState({
+                listViewData: this.props.taskList.list
+            })
+        }
+    }
+
+    closeRow = (rowMap, rowKey) => {
+        if (rowMap[rowKey]) {
+            rowMap[rowKey].closeRow();
+        }
+    };
 
     navigateToAddTaskScreen() {
         const { navigate } = this.props.navigation;
         navigate('AddTaskScreen');
     }
 
-    navigateToEditTaskScreen() {
+    navigateToEditTaskScreen(data) {
         const { navigate } = this.props.navigation;
-        navigate('EditTaskScreen');
+        navigate('EditTaskScreen', data);
     }
 
     getTodayDate(){
         return moment().format('LL').toString();
+    }
+
+    getIconByCompleted(completed) {
+        return completed ? faCheckCircle: faCircle;
     }
 
     render() {
@@ -58,10 +81,17 @@ export default class TodoScreen extends Component {
                     data={this.state.listViewData}
                     renderItem={ (data, rowMap) => (
                         <View style={styles.item}>
-                            <TouchableOpacity style={styles.contentContainer}>
-                                <Text style={styles.mainContent}>I am {data.item.text} in a SwipeListView</Text>
+                            <TouchableOpacity onPress={()=>this.props.toggleCompleteAction(data.index)} style={styles.contentContainer}>
                                 <View>
-                                    <Text>Due date: 24/04/2022 12:26 AM </Text>
+                                    <Text style={[ {
+                                        textDecorationLine: data.item.completed ?'line-through' : 'none',
+                                    } , styles.mainContent]}>{data.item.name}</Text>
+                                    <View style = {{paddingTop: 5}}>
+                                        <Text  style={{ textDecorationLine: data.item.completed  ?'line-through' : 'none' }}>Due date: {data.item.date} • {data.item.time} </Text>
+                                    </View>
+                                </View>
+                                <View style = {{alignItems: 'center', justifyContent: 'center'}}>
+                                    <FontAwesomeIcon size = {24} color = '#A7C7E7' icon = { this.getIconByCompleted(data.item.completed) } />
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -70,13 +100,16 @@ export default class TodoScreen extends Component {
                         <View style={styles.rowBack}>
                             <TouchableOpacity
                                 style={[styles.backRightBtn, styles.backRightBtnLeft]}
-                                onPress={() => this.navigateToEditTaskScreen()}
+                                onPress={() => this.navigateToEditTaskScreen(data.item)}
                             >
                                 <FontAwesomeIcon size={35} color='white' icon={ faEdit } />
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={[styles.backRightBtn, styles.backRightBtnRight]}
-                                onPress={() => console.log('delete')}
+                                onPress={() => {
+                                    this.closeRow(rowMap, data.index)
+                                    this.props.removeTaskAction(data.index)
+                                }}
                             >
                                 <FontAwesomeIcon size={35} color='white' icon={ faTrash } />
                             </TouchableOpacity>
@@ -95,6 +128,28 @@ export default class TodoScreen extends Component {
         )
     }
 }
+
+const mapStateToProps = state =>{
+    return{
+        taskList: state.taskReducer,
+    }
+}
+
+const mapDispatchToProps = dispatch =>{
+    return{
+        taskFetchAction: ()=>{
+            dispatch(taskFetchAction());
+        },
+        removeTaskAction: (taskNumber) => {
+            dispatch(removeTaskAction(taskNumber));
+        },
+        toggleCompleteAction: (taskNumber) => {
+            dispatch(toggleCompleteAction(taskNumber));
+        }
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(TodoScreen);
 
 const styles = new StyleSheet.create({
     container: {
@@ -124,6 +179,8 @@ const styles = new StyleSheet.create({
         width: '90%',
         paddingVertical: 18,
         marginHorizontal: 20,
+        borderLeftWidth: 10,
+        borderLeftColor: '#A7C7E7',
         height: 80,
         borderWidth: 1,
         backgroundColor: '#f7f7f7',
@@ -140,10 +197,13 @@ const styles = new StyleSheet.create({
         elevation: 7,
     },
     contentContainer: {
-        marginLeft: 15,
+        marginHorizontal: 15,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     mainContent: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold',
     },
     rowBack: {

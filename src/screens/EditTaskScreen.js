@@ -19,8 +19,12 @@ export default class EditTaskScreen extends Component {
         this.openDateModal = this.openDateModal.bind(this);
     }
 
+    componentDidMount(){
+        console.log(this.props.route.params);
+    }
+
     componentDidUpdate() {
-        console.log(this.state.date);
+        
     }
 
     formatDate() {
