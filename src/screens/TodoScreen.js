@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native'
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faPlus, faTrash, faEdit, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash, faEdit, faCheckCircle, faBars } from '@fortawesome/free-solid-svg-icons';
 import { faCircle } from '@fortawesome/free-regular-svg-icons'
 import moment from 'moment';
 import {connect} from "react-redux";
@@ -61,6 +61,9 @@ class TodoScreen extends Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
+                <TouchableOpacity style= {{marginLeft: 20, marginTop: 30}} onPress={() => this.props.navigation.toggleDrawer()}>
+                    <FontAwesomeIcon size = {30} color = 'gray' icon = { faBars } />
+                </TouchableOpacity>
                 <View style= {{marginHorizontal: 20}}>
                     <View style ={styles.titleContainer}>
                         <Text style={styles.title}>
@@ -159,7 +162,7 @@ const styles = new StyleSheet.create({
         alignSelf:'center',
     },
     titleContainer: {
-        marginTop: 94,
+        marginTop: 60,
         flexDirection:'row',
         justifyContent:'space-between',
     },
