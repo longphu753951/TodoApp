@@ -18,7 +18,7 @@ const Drawer = createDrawerNavigator();
 const Navigation = props => {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Navigator initialRouteName="Home" edgeWidth={0}>
           <Drawer.Screen name="Home" component={HomeStack} />
       </Drawer.Navigator>
     </NavigationContainer>
