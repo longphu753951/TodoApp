@@ -21,7 +21,6 @@ class TodoScreen extends Component {
 
     componentDidMount() {
         this.props.taskFetchAction();
-        console.log('asdasd',this.props.taskList.list);
         this.setState({
             listViewData: this.props.taskList.list
         })
@@ -29,7 +28,6 @@ class TodoScreen extends Component {
 
     componentDidUpdate(prevProps) {
         if(prevProps.taskList !== this.props.taskList){
-            console.log(this.props.list);
             this.setState({
                 listViewData: this.props.taskList.list
             })
@@ -49,7 +47,6 @@ class TodoScreen extends Component {
 
     navigateToEditTaskScreen(data) {
         const { navigate } = this.props.navigation;
-        console.log(data);
         navigate('EditTaskScreen', data);
     }
 

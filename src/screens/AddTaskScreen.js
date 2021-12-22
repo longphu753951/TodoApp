@@ -19,12 +19,7 @@ class AddTaskScreen extends Component {
         this.openDateModal = this.openDateModal.bind(this);
     }
 
-    componentDidUpdate(prevState) {
-        if(prevState.name != this.state.name){
-            console.log(this.state.name);
-        }
-    }
-
+    
     formatDate() {
         return this.state.dateText || 'DD/MM/YYYY';
     }
