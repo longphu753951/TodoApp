@@ -28,6 +28,11 @@ export default class TodoScreen extends Component {
         navigate('AddTaskScreen');
     }
 
+    navigateToEditTaskScreen() {
+        const { navigate } = this.props.navigation;
+        navigate('EditTaskScreen');
+    }
+
     getTodayDate(){
         return moment().format('LL').toString();
     }
@@ -65,7 +70,7 @@ export default class TodoScreen extends Component {
                         <View style={styles.rowBack}>
                             <TouchableOpacity
                                 style={[styles.backRightBtn, styles.backRightBtnLeft]}
-                                onPress={() => console.log('close')}
+                                onPress={() => this.navigateToEditTaskScreen()}
                             >
                                 <FontAwesomeIcon size={35} color='white' icon={ faEdit } />
                             </TouchableOpacity>

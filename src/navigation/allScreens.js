@@ -1,6 +1,7 @@
 import React from 'react';
 import TodoScreen from '../screens/TodoScreen';
 import AddTaskScreen from '../screens/AddTaskScreen';
+import EditTaskScreen from '../screens/EditTaskScreen';
 
 const allScreens = (Stack) => {
     return (
@@ -15,6 +16,13 @@ const allScreens = (Stack) => {
         <Stack.Screen
           name="AddTaskScreen"
           component={AddTaskScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="EditTaskScreen"
+          component={EditTaskScreen}
           options={{
             headerShown: false,
           }}
