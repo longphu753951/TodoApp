@@ -10,11 +10,28 @@ export default function DateTimePicker(props) {
     const [date, setDate] = useState(new Date());
     const [dateText, setDateText] = useState('');
     const [open, setOpen] = useState(false);
-    const {icon, placeholder, buttonStyle, mode, onChange} = props;
+    const {icon, placeholder, buttonStyle, mode, onChange, defaultDate} = props;
 
     useEffect(() => {
         onChange(dateText);
     },[dateText])
+
+    useEffect(()=> {
+        if(defaultDate && mode) {
+            console.log(defaultDate);
+            setDateText(defaultDate);
+            switch(mode) {
+                case 'date':
+                    setDate(moment(defaultDate, 'DD/MM/YYYY').toDate());
+                    break;
+                case 'time':
+                    setDate(moment(defaultDate, 'hh:mm A').toDate());
+                    break;
+                default:
+                    return;
+            }
+        }
+    }, []);
 
     const openDateModal = () => {
         setOpen(true);
@@ -98,6 +115,7 @@ DateTimePicker.propTypes = {
     buttonStyle: ViewPropTypes.style,
     icon: PropTypes.any,
     onChange: PropTypes.func,
+    defaultDate: PropTypes.string,
 }
 
 DateTimePicker.defaultProps = {

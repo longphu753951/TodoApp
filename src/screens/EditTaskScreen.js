@@ -10,17 +10,19 @@ export default class EditTaskScreen extends Component {
     constructor(props) {
         super(props);
         this.state ={
-            date: new Date(),
-            open: false,
-            dateText:'',
-            hour: new Date(),
-            hourText: '',
+            name: '',
+            date: '',
+            time: '',
         }
         this.openDateModal = this.openDateModal.bind(this);
     }
 
     componentDidMount(){
-        console.log(this.props.route.params);
+        this.setState({
+            name: this.props.route.params.name,
+            date: this.props.route.params.date,
+            time: this.props.route.params.time,
+        })
     }
 
     componentDidUpdate() {
@@ -45,7 +47,7 @@ export default class EditTaskScreen extends Component {
                 <SafeAreaView style={{marginHorizontal: 20}}>
                     <View style={styles.headingContainer}>
                         <Text style={styles.title}>
-                            Edit your task task
+                            Edit your task
                         </Text>
                     </View>
                     <View style={styles.inputContainer}>
@@ -53,12 +55,13 @@ export default class EditTaskScreen extends Component {
                          borderColor={'#000000'} 
                          fontSize={18}
                          variant="underlined" 
-                         placeholder="Type your new task ..." />
+                         placeholder="Type to edit your task ..." />
                         {/* <Button 
                             title="Open" 
                             onPress={() => this.setState({open: true})} /> */}
                         <View style={styles.dateTimeInputContainer}>
                             <DateTimePicker
+                                defaultDate={this.state.date}
                                 onChange={(dateText) => {
                                     console.log(dateText);
                                 }}
