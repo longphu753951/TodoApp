@@ -60,8 +60,9 @@ class EditTaskScreen extends Component {
                     </View>
                     <View style={styles.inputContainer}>
                         <Input
+                         style={{ borderColor:"ffffff" }}
                          defaultValue={this.state.name}
-                         borderColor={'#000000'} 
+                         borderColor={'#000000'}
                          fontSize={18}
                          variant="underlined" 
                          onChangeText={(text) => {

@@ -54,6 +54,7 @@ class AddTaskScreen extends Component {
                     </View>
                     <View style={styles.inputContainer}>
                         <Input
+                         style={{ borderColor:"ffffff" }}
                          borderColor={'#000000'} 
                          fontSize={18}
                          onChangeText={(text) => {
