@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Text, View, SafeAreaView, StyleSheet} from 'react-native';
+import { Text, View, SafeAreaView, StyleSheet, TouchableOpacity} from 'react-native';
 import { Input, Fab } from 'native-base';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faPlus, faClock } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faClock, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import DateTimePicker from '../components/DateTimePicker';
 import { connect } from 'react-redux';
 import { addTaskAction } from '../reducer/taskReducer'
@@ -47,6 +47,9 @@ class AddTaskScreen extends Component {
         return (
             <KeyboardAwareScrollView>
                 <SafeAreaView style={{marginHorizontal: 20}}>
+                    <TouchableOpacity style= {{marginTop: 30}} onPress={() => this.props.navigation.goBack()}>
+                        <FontAwesomeIcon size = {30} color = 'gray' icon = { faChevronLeft } />
+                    </TouchableOpacity>
                     <View style={styles.headingContainer}>
                         <Text style={styles.title}>
                             Add new task
@@ -115,7 +118,7 @@ export default connect(null,mapDispatchToProps)(AddTaskScreen);
 
 const styles = new StyleSheet.create({
     headingContainer: {
-        marginTop: 94,
+        marginTop: 60,
     },
     title: {
         fontSize: 30,
