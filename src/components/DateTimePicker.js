@@ -72,6 +72,7 @@ export default function DateTimePicker(props) {
                 modal
                 mode= {mode}
                 open={open}
+                minimumDate={new Date()}
                 date={date}
                 onConfirm={(date) => {
                     onSelectedDate(date)
